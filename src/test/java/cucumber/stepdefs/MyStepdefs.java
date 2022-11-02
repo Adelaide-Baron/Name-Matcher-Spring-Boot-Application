@@ -15,7 +15,7 @@ public class MyStepdefs {
 
     @When("a GET request is performed on {string}")
     public void a_get_request_is_performed_on_actuator_health(String endpoint) {
-        response = get(applicationUrl + endpoint);
+        response = get(applicationUrl + endpoint); //have this be applicationURL + endpoint, just wasn't working previously
     }
     @Then("the response code is {string}")
     public void the_response_code_is(String code) {
@@ -29,4 +29,8 @@ public class MyStepdefs {
         response.then().assertThat().body(key, equalTo(value));
     }
 
+    @When("a GET request is performed on the baseURL")
+    public void aGETRequestIsPerformedOnTheBaseURL() {
+        response = get(applicationUrl);
+    }
 }
