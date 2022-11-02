@@ -20,9 +20,9 @@ public class UnitTests {
     }
 
     @Test
-    @DisplayName("Check that message body contains Hello World")
-    void checkThatMessageBodyContainsHelloWorld(){
-        get(baseURL).then()
+    @DisplayName("Check that HelloWorld endpoint contains Hello World")
+    void checkThatHelloWorldEndpointBodyContainsHelloWorld(){
+        get(baseURL + "HelloWorld").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .body("message", equalTo("Hello World"));

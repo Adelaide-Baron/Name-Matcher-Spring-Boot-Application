@@ -16,7 +16,7 @@ public class DemoController {
     private static final Logger LOG = getLogger(DemoController.class.getName());
 
 
-    @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("HelloWorld")
     public Map<String, String> helloWorld() throws UnknownHostException {
         return getResponse();
     }
