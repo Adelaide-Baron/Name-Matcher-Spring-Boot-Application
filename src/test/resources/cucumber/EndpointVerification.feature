@@ -15,3 +15,4 @@ Feature: Verify endpoint responses
     When a GET request is performed on "NameMatcher/adelaide_baron"
     Then the response code is "200"
     And the response contains "Match_found" with value "NOT_MATCHED"
+

@@ -1,20 +1,28 @@
 import cucumber.DemoController;
+//import cucumber.PersonRepository;
+import cucumber.PersonRepository;
 import io.restassured.RestAssured;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import io.restassured.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
-import java.util.function.BooleanSupplier;
 
 import static io.restassured.RestAssured.get;
 import static org.hamcrest.Matchers.equalTo;
 
+
+
 public class UnitTests {
 
+    //nested classes
     String baseURL = "http://localhost:15692/";
+//    private final PersonRepository personRepository;
+//
+//    public UnitTests(PersonRepository personRepository) {
+//        this.personRepository = personRepository;
+//    }
+
     @Test
     @DisplayName("Check that actuator/health endpoint returns status code 200")
     void checkThatActuatorHealthReturnsCode200(){
@@ -59,10 +67,29 @@ public class UnitTests {
         String[] actual = { DemoController.concatNameLowerCase("hi tHere"), DemoController.concatNameLowerCase("hi_There")};
         String[] expected = {"hithere", "hithere"};
         Assertions.assertArrayEquals(expected, actual);
-
-
     }
 
+    @Autowired
+    PersonRepository personRepository;
+    @Test
+    @DisplayName("DB testing")
+    void checkConnectionToDB(){
+        personRepository.returnNamesIfMatch("Joe", "bloggs");
+    }
+
+
+//
+//
+//    @Test
+//    @DisplayName("Check that returnNameIfMatch returns concat name for match")
+//    void checkThatreturnNameIfMatchReturnsConcatNameForMatch(){
+//        String first_name = "Joe";
+//        String surname = "Bloggs";
+//
+//        System.out.println(personRepository.returnNameConcatIfMatch(first_name, surname));
+//
+//
+//    }
 
 
 }

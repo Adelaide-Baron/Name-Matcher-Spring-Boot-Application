@@ -5,3 +5,4 @@ Feature: Application Health
     Then the response code is "200"
     And the response contains "status" with value "UP"
 
+
