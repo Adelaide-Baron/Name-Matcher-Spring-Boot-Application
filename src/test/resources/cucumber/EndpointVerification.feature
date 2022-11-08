@@ -16,3 +16,5 @@ Feature: Verify endpoint responses
     Then the response code is "200"
     And the response contains "Match_found" with value "NOT_MATCHED"
 
+
+
