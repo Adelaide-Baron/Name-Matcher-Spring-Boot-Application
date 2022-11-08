@@ -4,4 +4,12 @@ Mini project, to take a name, for example “Joe Bloggs” and match it to a nam
 
 
 - rename main>java>cucumber, not cucumber 
-- 
+
+### Name Matcher
+```
+http://localhost:15692/NameMatcher/firstname_lastname
+```
+
+- sort structure/refactor 
+- separate stepDefs 
+- sort application into separate package/directory from tests 
