@@ -6,3 +6,4 @@ Feature: Application Health
     And the response contains "status" with value "UP"
 
 
+

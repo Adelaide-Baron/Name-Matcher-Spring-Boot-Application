@@ -2,9 +2,6 @@ package cucumber;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +11,6 @@ import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-//@Validated
 
 @RestController
 @RequiredArgsConstructor
@@ -22,12 +18,10 @@ public class DemoController {
 
     private final DatabaseService databaseService;
     private static final Logger LOG = getLogger(DemoController.class.getName());
-    String[] nameData = {"Jane Doe", "Joe Bloggs"};
 
-//    @Autowired
+
+
     private PersonRepository personRepository;
-
-//    private final PersonRepository personRepository;
 
     @GetMapping("HelloWorld")
     public Map<String, String> helloWorld() throws UnknownHostException {
@@ -37,19 +31,9 @@ public class DemoController {
     private Map<String, String> getResponse() throws UnknownHostException {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hello World");
-        LOG.info("Returning {}", response); //investigate this bit?
+        LOG.info("Returning {}", response);
         return response;
     }
-
-    @GetMapping("DB")
-    public Map<String, String> DBTest(){
-//        isNameInDB(name.toLowerCase());
-        Map<String, String> response = new HashMap<>();
-        response.put("Match_found", personRepository.returnNameConcatIfMatch("Joe", "Bloggs").toString());
-        LOG.info("Returning {}", response); //investigate this bit?
-        return response;
-    }
-
 
     @GetMapping("NameMatcher/{name}")
     public Map<String, String> nameMatcher(@PathVariable("name") String name){
@@ -68,26 +52,16 @@ public class DemoController {
         } else {
             return "NOT_MATCHED";
         }
-        // look at enum
     }
 
-//    public ArrayList<String> getConcatNamesInDB(){
-//        List<Person> persons = personRepository.findAll();
-//        ArrayList<String> namesInDB = new ArrayList<>();
-//        for(int i = 0; i < persons.size(); i ++){
-//            String firstName = persons.get(i).getFirstName();
-//            String surname = persons.get(i).getSurname();
-//            String fullName = firstName.toLowerCase() + surname.toLowerCase();
-//            namesInDB.add(fullName);
-//        }
-//        return namesInDB;
-//    }
 
     public ArrayList<String> doNameConcat(){
         return databaseService.getConcatNamesInDB();
     }
 
-
+    public List<Person> findAllFromDB(){
+        return databaseService.findAllFromDB();
+    }
 
     public static String concatNameLowerCase(String name) {
         String lowerCaseName = null; 
@@ -99,9 +73,8 @@ public class DemoController {
             String[] nameToCheck = name.split("_");
             lowerCaseName = String.join("", nameToCheck).toLowerCase();
             return lowerCaseName;
-        } 
-        
-        return lowerCaseName; 
+        }
+        return lowerCaseName;
 
     }
 

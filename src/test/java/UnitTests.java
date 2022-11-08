@@ -1,11 +1,11 @@
 import cucumber.*;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.dialect.Database;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -26,89 +26,126 @@ public class UnitTests {
     @Autowired
     private PersonRepository personRepository;
     @Autowired
-    private DatabaseService demoController;
+    private DatabaseService databaseService;
 
-    @Test
-    @DisplayName("Check that actuator/health endpoint returns status code 200")
-    void checkThatActuatorHealthReturnsCode200(){
-        Assertions.assertEquals(RestAssured.get(baseURL + "actuator/health").statusCode(), 200);
-    }
+    @DisplayName("Endpoint")
+    @Nested
+    class endpointTests {
+        @Test
+        @DisplayName("Check that actuator/health endpoint returns status code 200")
+        void checkThatActuatorHealthReturnsCode200() {
+            Assertions.assertEquals(RestAssured.get(baseURL + "actuator/health").statusCode(), 200);
+        }
 
-    @Test
-    @DisplayName("Check that HelloWorld endpoint contains Hello World")
-    void checkThatHelloWorldEndpointBodyContainsHelloWorld(){
-        get(baseURL + "HelloWorld").then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value())
-                .body("message", equalTo("Hello World"));
-    }
+        @Test
+        @DisplayName("Check that HelloWorld endpoint contains Hello World")
+        void checkThatHelloWorldEndpointBodyContainsHelloWorld() {
+            get(baseURL + "HelloWorld").then()
+                    .assertThat()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("message", equalTo("Hello World"));
+        }
 
-//    @Disabled("Method no longer in use ")
-//    @Test
-//    @DisplayName("Check that concatNamesInArray concatenates and converts to lower case")
-//    void checkThatconcatNamesInArrayConcatsAndLower(){
-//        String[] array = {"Adelaide Baron", "baron AdeLiade"};
-//        String[] expected = {"adelaidebaron", "baronadeliade"};
-//        DemoController demoController = new DemoController(demoController);
-//        Assertions.assertArrayEquals(expected, demoController.concatNamesInArray(array).toArray());
-//    }
+        @Test
+        @DisplayName("Check that NameMatcher/firstName_surname endpoint contains Match_found ")
+        void checkThatNameMatcherEndpointContainsMatch_found() {
 
-//    @Test
-//    @DisplayName("Check that isNameInDB returns MATCHED for name in the DB")
-//    void checkThatisNameInDBReturnsMatchedForNameInDB(){
-//        DemoController demoController = new DemoController();
-//        Assertions.assertEquals("MATCHED", demoController.isNameInDB("Joe Bloggs"));
-//    }
-//    @Test
-//    @DisplayName("Check that isNameInDB returns NOT_MATCHED for name in the DB")
-//    void checkThatisNameInDBReturnsNotMatchedForNameInDB(){
-//        DemoController demoController = new DemoController();
-//        // demoController.isNameInDB("Joe bloggs");
-//        Assertions.assertEquals("NOT_MATCHED", demoController.isNameInDB("Joseph Bloggs"));
-//    }
+            RestAssured.baseURI = baseURL;
+            RequestSpecification httpRequest = RestAssured.given();
+            Response response = httpRequest.get("NameMatcher/Joe_Bloggs");
 
-    @Test
-    @DisplayName("Check that concatNameLowerCase works on seperated by space and underscore")
-    void concatNameLowerCaseSpaceAndUnderscore(){
-        String[] actual = { DemoController.concatNameLowerCase("hi tHere"), DemoController.concatNameLowerCase("hi_There")};
-        String[] expected = {"hithere", "hithere"};
-        Assertions.assertArrayEquals(expected, actual);
-    }
+            ResponseBody body = response.getBody();
 
+            String bodyAsString = body.asString();
+            Assertions.assertTrue(bodyAsString.contains("Match_found"));
+        }
 
+        @Test
+        @DisplayName("Check that NameMatcher/firstName_surname endpoint contains Firstname_lastname")
+        void checkThatNameMatcherEndpointContainsFirstname_lastname() {
 
+            RestAssured.baseURI = baseURL;
+            RequestSpecification httpRequest = RestAssured.given();
+            Response response = httpRequest.get("NameMatcher/Joe_Bloggs");
 
-    @Test
-    @DisplayName("Check DB Connection")
-    void checkDBConnection() {
-        Assertions.assertNotNull(personRepository.findAll());
-    }
+            ResponseBody body = response.getBody();
 
-    @Test
-    @DisplayName("generic")
-    void generic(){
-        demoController.getConcatNamesInDB();
-        DemoController demoController1 = new DemoController(demoController);
-        System.out.println(demoController1.doNameConcat().toString());
-    }
+            String bodyAsString = body.asString();
+            Assertions.assertTrue(bodyAsString.contains("Firstname_lastname"));
+        }
 
-    @Test
-    @DisplayName("Check that MATCHED is returned for match in DB")
-    void checkThatMATCHEDisReturnedForMatchInDB() {
-        DemoController demoController1 = new DemoController(demoController);
-        Assertions.assertEquals("MATCHED", demoController1.isNameInDB("Joe_Bloggs"));
-    }
+        @Test
+        @DisplayName("Check that NameMatcher endpoint returns MATCHED for /firstName_surname in DB")
+        void checkThatNameMatcherEndpointReturnsMatchForMatch() {
 
-    @Test
-    @DisplayName("Check that NOT_MATCHED is returned for no match in DB")
-    void checkThatNOT_MATCHEDisReturnedForNoMatchInDB() {
+            RestAssured.baseURI = baseURL;
+            RequestSpecification httpRequest = RestAssured.given();
+            Response response = httpRequest.get("NameMatcher/Joe_Bloggs"); //could change to read the DB, then feed this into the URL
 
-    }
+            ResponseBody body = response.getBody();
 
+            String bodyAsString = body.asString();
+            Assertions.assertTrue(bodyAsString.contains("MATCHED"));
+        }
 
+        @Test
+        @DisplayName("Check that NameMatcher endpoint returns NOT_MATCHED for /firstName_surname not in DB")
+        void checkThatNameMatcherEndpointReturnsNOT_MATCHEDForMatch() {
 
+            RestAssured.baseURI = baseURL;
+            RequestSpecification httpRequest = RestAssured.given();
+            Response response = httpRequest.get("NameMatcher/Joe_loggs"); //could change to read the DB, then feed this into the URL
+
+            ResponseBody body = response.getBody();
+
+            String bodyAsString = body.asString();
+            Assertions.assertTrue(bodyAsString.contains("NOT_MATCHED"));
+        }
 
     }
+
+    @DisplayName("DB Methods")
+    @Nested
+    class DBMethodTests{
+        @Test
+        @DisplayName("Check that concatNameLowerCase works on seperated by space and underscore")
+        void concatNameLowerCaseSpaceAndUnderscore() {
+            String[] actual = {DemoController.concatNameLowerCase("hi tHere"), DemoController.concatNameLowerCase("hi_There")};
+            String[] expected = {"hithere", "hithere"};
+            Assertions.assertArrayEquals(expected, actual);
+        }
+
+        @Test
+        @DisplayName("Check DB Connection")
+        void checkDBConnection() {
+            databaseService.getConcatNamesInDB();
+            DemoController demoController1 = new DemoController(databaseService);
+
+            Assertions.assertNotNull(demoController1.doNameConcat().toString());
+        }
+
+        @Test
+        @DisplayName("Check that MATCHED is returned for match in DB")
+        void checkThatMATCHEDisReturnedForMatchInDB() {
+            DemoController demoController1 = new DemoController(databaseService);
+            Assertions.assertEquals("MATCHED", demoController1.isNameInDB("Joe_Bloggs"));
+        }
+
+        @Test
+        @DisplayName("Check that NOT_MATCHED is returned for no match in DB")
+        void checkThatNOT_MATCHEDisReturnedForNoMatchInDB() {
+            DemoController demoController1 = new DemoController(databaseService);
+            Assertions.assertEquals("NOT_MATCHED", demoController1.isNameInDB("Joe_B"));
+        }
+    }
+
+}
+
+
+
+
+
+
 
 
 

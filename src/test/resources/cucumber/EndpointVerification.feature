@@ -1,4 +1,4 @@
-# Created by adelaide.baron at 02/11/2022
+
 Feature: Verify endpoint responses
 
   Scenario: Hello World
