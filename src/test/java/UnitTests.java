@@ -4,15 +4,10 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.dialect.Database;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static io.restassured.RestAssured.get;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -20,11 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 @Slf4j
 public class UnitTests {
 
-    //nested classes
     String baseURL = "http://localhost:15692/";
-
-    @Autowired
-    private PersonRepository personRepository;
     @Autowired
     private DatabaseService databaseService;
 
@@ -80,7 +71,13 @@ public class UnitTests {
 
             RestAssured.baseURI = baseURL;
             RequestSpecification httpRequest = RestAssured.given();
-            Response response = httpRequest.get("NameMatcher/Joe_Bloggs"); //could change to read the DB, then feed this into the URL
+
+            DemoController demoController1 = new DemoController(databaseService);
+            Person personInDB = demoController1.findAllFromDB().get(0);
+            String fullName = personInDB.getFirstName() + "_" + personInDB.getSurname();
+
+
+            Response response = httpRequest.get("NameMatcher/" + fullName);
 
             ResponseBody body = response.getBody();
 
@@ -94,7 +91,13 @@ public class UnitTests {
 
             RestAssured.baseURI = baseURL;
             RequestSpecification httpRequest = RestAssured.given();
-            Response response = httpRequest.get("NameMatcher/Joe_loggs"); //could change to read the DB, then feed this into the URL
+
+            DemoController demoController1 = new DemoController(databaseService);
+            Person personInDB = demoController1.findAllFromDB().get(0);
+            String fullName = personInDB.getFirstName() + "1000_" + personInDB.getSurname();
+
+
+            Response response = httpRequest.get("NameMatcher/" + fullName);
 
             ResponseBody body = response.getBody();
 

@@ -69,7 +69,7 @@ public class MyStepdefs {
 
 
     @When("I findAll in the database")
-    public void iInTheDatabase(String arg0) {
+    public void iInTheDatabase() {
         DemoController demoController = new DemoController(databaseService);
         allFromDB = demoController.findAllFromDB();
     }
