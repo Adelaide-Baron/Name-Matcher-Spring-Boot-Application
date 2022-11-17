@@ -13,8 +13,3 @@ INSERT INTO persons
 VALUES
     ("Joe", "Bloggs", 1),
     ("James", "Smith", 2);
-
--- Todo where has the MySQL gone? Perhaps as deleted docker container, it went?
--- Didn't actually run it from here before
-
--- already ran in MySQL
