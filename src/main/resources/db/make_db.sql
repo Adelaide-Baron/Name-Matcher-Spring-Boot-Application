@@ -2,15 +2,19 @@ CREATE DATABASE mini_project;
 
 USE mini_project;
 
-CREATE TABLE IF NOT EXISTS `PEOPLE` (
-`FIRST_NAME` VARCHAR(50),
-`SURNAME` VARCHAR(50)
-);
+CREATE TABLE IF NOT EXISTS persons (
+    firstName VARCHAR(50),
+    surname VARCHAR(50),
+    id INT
+    );
 
-INSERT INTO PEOPLE
-(FIRST_NAME, SURNAME)
+INSERT INTO persons
+(firstName, surname, id)
 VALUES
-("Joe", "Bloggs"),
-("James", "Smith");
+    ("Joe", "Bloggs", 1),
+    ("James", "Smith", 2);
+
+-- Todo where has the MySQL gone? Perhaps as deleted docker container, it went?
+-- Didn't actually run it from here before
 
 -- already ran in MySQL

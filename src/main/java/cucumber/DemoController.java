@@ -19,10 +19,6 @@ public class DemoController {
     private final DatabaseService databaseService;
     private static final Logger LOG = getLogger(DemoController.class.getName());
 
-
-
-    private PersonRepository personRepository;
-
     @GetMapping("HelloWorld")
     public Map<String, String> helloWorld() throws UnknownHostException {
         return getResponse();
@@ -41,7 +37,7 @@ public class DemoController {
         Map<String, String> response = new HashMap<>();
         response.put("Firstname_lastname", name);
         response.put("Match_found", isNameInDB(name.toLowerCase()));
-        LOG.info("Returning {}", response); //investigate this bit?
+        LOG.info("Returning {}", response);
         return response;
     }
 
@@ -50,7 +46,7 @@ public class DemoController {
         if(arrayToCheck.contains(concatNameLowerCase(name))){
             return "MATCHED";
         } else {
-            return "NOT_MATCHED";
+            return "NOT_MATCHED"; // Todo enum
         }
     }
 
@@ -64,27 +60,19 @@ public class DemoController {
     }
 
     public static String concatNameLowerCase(String name) {
-        String lowerCaseName = null; 
-        if(name.contains(" ")){
-            String[] nameToCheck = name.split(" ");
-            lowerCaseName = String.join("", nameToCheck).toLowerCase();
-            return lowerCaseName;
-        } else if (name.contains("_")) {
-            String[] nameToCheck = name.split("_");
-            lowerCaseName = String.join("", nameToCheck).toLowerCase();
-            return lowerCaseName;
-        }
-        return lowerCaseName;
+        String lowerCaseName = null;
+            if(name.contains(" ")){
+                String[] nameToCheck = name.split(" ");
+                lowerCaseName = String.join("", nameToCheck).toLowerCase();
+                return lowerCaseName;
+            } else if (name.contains("_")) {
+                String[] nameToCheck = name.split("_");
+                lowerCaseName = String.join("", nameToCheck).toLowerCase();
+                return lowerCaseName;
+            } else{
+                lowerCaseName = name.toLowerCase();
+                return lowerCaseName;
+            }
 
-    }
-
-
-    public ArrayList<String> concatNamesInArray(String[] array) { // NO LONGER IN USE
-        ArrayList<String> lowerCaseConcat = new ArrayList<>();
-        for (String item : array) {
-            String nameToAdd = concatNameLowerCase(item);
-            lowerCaseConcat.add(nameToAdd);
-        }
-        return lowerCaseConcat;
     }
 }

@@ -16,13 +16,14 @@ public class DatabaseService {
     private final PersonRepository personRepository;
 
     public ArrayList<String> getConcatNamesInDB(){
-        List<Person> persons = personRepository.findAll();
+        List<Person> persons = findAllFromDB();
         ArrayList<String> namesInDB = new ArrayList<>();
         for(int i = 0; i < persons.size(); i ++){
             String firstName = persons.get(i).getFirstName();
             String surname = persons.get(i).getSurname();
             String fullName = firstName.toLowerCase() + surname.toLowerCase();
-            namesInDB.add(fullName);
+            namesInDB.add(fullName); // Todo look at for each
+            // Todo look at SQL Query
         }
         return namesInDB;
     }

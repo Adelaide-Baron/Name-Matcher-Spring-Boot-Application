@@ -1,9 +1,10 @@
 # Name Matcher Spring Boot Application
 
-Mini project, to take a name, for example “Joe Bloggs” and match it to a name which exists in the database. If there is a match, return a response of “MATCHED”. If there isn’t an exact match, return “NO_MATCH”.
+Project set to develop skills in BDD, unit tests, and Springboot. 
 
-In addition, it was required to include unit and Cucumber tests. 
-
+The project consists of two endpoints: 
+1. A HelloWorld endpoint, returning `"Hello World"` 
+2. A NameMatcher endpoint, searching a MySQL DB for a match in the DB and returning `MATCHED`, or `NOT_MATCHED`. 
 
 
 <details>
@@ -20,12 +21,7 @@ In addition, it was required to include unit and Cucumber tests.
 </details>
 
 ## How to use 
-I have included an application.yml in the XYZ package to use port 16692, as the default 8080 was in use. This can be changed, or removed. 
-
-The base URL is: 
-```aidl
-http://localhost:15692/
-```
+I have included an application.yml in the XYZ package to use port 15692, as the default 8080 was in use. This can be changed, or removed. 
 
 ### Hello World Endpoint
 ```
@@ -34,9 +30,7 @@ http://localhost:15692/HelloWorld
 No variations, this will return a response as follows: 
 
 ```aidl
-{
-"message": "Hello World"
-}
+{ "message": "Hello World"}
 ```
 
 ### Name Matcher
@@ -50,22 +44,18 @@ http://localhost:15692/NameMatcher/addi_baron
 
 This searches a table within the (MySQL) database, and returns the following if the name you supply is in the DB: 
 ```aidl
-{
-"Match_found": "MATCHED",
-"Firstname_lastname": "addi_baron"
-}
+{ "Match_found": "MATCHED",
+"Firstname_lastname": "addi_baron" }
 ```
 
 Or, if the name is not in the DB": 
 ```aidl
-{
-"Match_found": "NOT_MATCHED",
-"Firstname_lastname": "addi_baron"
-}
+{ "Match_found": "NOT_MATCHED",
+"Firstname_lastname": "addi_baron" }
 ```
 
+### Tests
 
+A BDD layer can be found within src/test/resources/cucumber, and all can be run from src/test/java/cucumber/CucumberTest.java. 
 
-- sort structure/refactor 
-- separate stepDefs 
-- sort application into separate package/directory from tests 
+Unit tests can be found, and run from, src/test/java/UnitTests.java. 

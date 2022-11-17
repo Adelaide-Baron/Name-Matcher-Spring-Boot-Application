@@ -8,6 +8,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+
+import java.util.Arrays;
+import java.util.List;
+
 import static io.restassured.RestAssured.get;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -18,6 +22,8 @@ public class UnitTests {
     String baseURL = "http://localhost:15692/";
     @Autowired
     private DatabaseService databaseService;
+
+    List<Person> allFromDB;
 
     @DisplayName("Endpoint")
     @Nested
@@ -123,8 +129,16 @@ public class UnitTests {
         void checkDBConnection() {
             databaseService.getConcatNamesInDB();
             DemoController demoController1 = new DemoController(databaseService);
-
             Assertions.assertNotNull(demoController1.doNameConcat().toString());
+        }
+
+
+        @Test
+        @DisplayName("Check I can findAll in the DB")
+        void checkICanFindAllInDB(){
+            DemoController demoController = new DemoController(databaseService);
+
+            allFromDB = demoController.findAllFromDB();
         }
 
         @Test
@@ -139,6 +153,19 @@ public class UnitTests {
         void checkThatNOT_MATCHEDisReturnedForNoMatchInDB() {
             DemoController demoController1 = new DemoController(databaseService);
             Assertions.assertEquals("NOT_MATCHED", demoController1.isNameInDB("Joe_B"));
+        }
+
+        @Test
+        @DisplayName("Returns a list of people")
+        void checkThatSOMETHINGReturnsAListOfPeople(){
+
+            DemoController demoController = new DemoController(databaseService);
+            allFromDB = demoController.findAllFromDB();
+
+            Person person = new Person((long) 1, "Joe", "Bloggs");
+            Person person2 = new Person((long) 2, "James", "Smith");
+            List<Person> exectedResults = Arrays.asList(person, person2);
+            Assertions.assertEquals(exectedResults, allFromDB);
         }
     }
 
